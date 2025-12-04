@@ -3,7 +3,7 @@ from datetime import datetime
 from urllib.request import urlopen
 import json
 
-app = Flask(name)
+app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
@@ -24,11 +24,7 @@ def meteo():
         dt_value = list_element.get('dt')
         temp_kelvin = list_element.get('main', {}).get('temp')
 
-        if temp_kelvin is not None:
-            temp_celsius = temp_kelvin - 273.15
-        else:
-            temp_celsius = None
-
+        temp_celsius = temp_kelvin - 273.15 if temp_kelvin is not None else None
         results.append({'Jour': dt_value, 'temp': temp_celsius})
 
     return jsonify(results=results)
@@ -61,5 +57,5 @@ def commits_data():
 def commits():
     return render_template("commits.html")
 
-if name == "main":
+if __name__ == "__main__":
     app.run(debug=True)
